@@ -25,6 +25,7 @@ silent: quiet mode. (boolean)"""
 	arcpy.DefineProjection_management(raster, arcpy.SpatialReference(spatial_ref))
 	raster.save(path)
 
+# Extent, cell size, no data and ArcGIS coordinate system for GPM data file
 X_MIN = -180.0
 Y_MIN = -90.0
 L_X = 0.1
@@ -32,8 +33,7 @@ L_Y = 0.1
 NO_DATA = -9999.9
 SR = 4326 #wgs84
 
-
-f = open("list.txt", "r")  #list containing all .H5 file names
+f = open("list.txt", "r")  #list.txt contains all .H5 file names
 LIST = []
 for l in f:
 	LIST.append(l[:-1])
@@ -44,9 +44,12 @@ for fi in LIST:
 	f = h5py.File(fi, "r")
 	sm = f["Grid"]["precipitationCal"][:] #calibrated precip values from GPM-IMERG H5 files
 	
+	#needed to re-orient GPM data for ArcGIS mapping
 	sm = sm.transpose()
 	sm = numpy.flipud(sm)
 	
 	f.close()
-	DefineSpatialReferenceAndSave(sm, "C:\\Research\\SMAP\\" + s, X_MIN, Y_MIN, L_X, L_Y, NO_DATA, SR)
+	
+	#Create and save the ArcGIS Raster
+	DefineSpatialReferenceAndSave(sm, "C:\\Research\\GPM\\" + s, X_MIN, Y_MIN, L_X, L_Y, NO_DATA, SR)
 
