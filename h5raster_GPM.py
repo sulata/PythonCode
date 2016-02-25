@@ -5,6 +5,7 @@ import numpy
 import arcpy
 
 # contants and envitonments
+
 arcpy.env.overwriteOutput = True
 
 def DefineSpatialReferenceAndSave(in_array, path, x_min, y_min, cell_x, cell_y, no_data, spatial_ref, silent = False):
